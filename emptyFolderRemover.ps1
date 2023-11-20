@@ -31,7 +31,6 @@ try {
 catch {
     Write-Host 'An error occured while removing empty folders recursively.' -ForegroundColor Red;
 }
-
 Write-Host 'Press any key to exit...';
 $Host.UI.RawUI.ReadKey('NoEcho, IncludeKeyDown') | OUT-NULL;
 $Host.UI.RawUI.FlushInputbuffer();

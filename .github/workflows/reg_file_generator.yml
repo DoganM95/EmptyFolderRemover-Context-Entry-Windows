@@ -25,8 +25,8 @@ jobs:
         # Replace placeholders
         processed_reg="${reg_template/<scriptGoesHere>/$script}"
         processed_reg="${processed_reg//<shellnamegoeshere>/${{ vars.REGISTRY_KEY_NAME }}"
-        processed_reg="${processed_reg//<Context Description Goes Here>/${{ env.CONTEXT_ITEM_DESCRIPTION }}"
-        processed_reg="${processed_reg//<iconIndexGoesHere>/${{ env.ICON_INDEX }}"
+        processed_reg="${processed_reg//<Context Description Goes Here>/${{ vars.CONTEXT_ITEM_DESCRIPTION }}"
+        processed_reg="${processed_reg//<iconIndexGoesHere>/${{ vars.ICON_INDEX }}"
 
         # Get current timestamp
         timestamp=$(date +"%Y-%m-%d_%H-%M-%S")

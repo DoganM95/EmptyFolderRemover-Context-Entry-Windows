@@ -37,6 +37,10 @@ jobs:
                   # Save the processed registry file with timestamp
                   echo "$processed_reg" > "releases/emptyFolderRemover_$timestamp.reg"
 
+            - name: Check if .reg file is created
+              run: |
+                  ls -l releases/
+
             - name: Commit and Push changes
               uses: ad-m/github-push-action@master
               with:

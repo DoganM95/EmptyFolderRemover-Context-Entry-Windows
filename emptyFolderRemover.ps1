@@ -1,7 +1,7 @@
 try {
-    $pathToWrite = $pwd.Path.Replace('Microsoft.PowerShell.Core\FileSystem::', '');
-    Set-Location $pathToWrite;
-    function IsFolderEmptyOrDesktopIniOnly {
+    Set-Location $pwd.Path;
+    Set-Location -LiteralPath '%V';
+    function IsFolderEmpty {
         param (
             [string]$folderPath
         );
@@ -18,12 +18,14 @@ try {
             return $false;
         }
     }
-    $directories = Get-ChildItem -Path . -Recurse -Directory -Force | Sort-Object { $_.FullName.Split('\').Count } -Descending;
+    $directories = Get-ChildItem -Path . -Recurse -Directory -Force | Sort-Object { $_.FullName.Split('\\').Count } -Descending;
+    $index = 1;
     foreach ($dir in $directories) {
-        if (IsFolderEmptyOrDesktopIniOnly $dir.FullName) {
-            Write-Host 'Removing: $($dir.FullName)';
+        if (IsFolderEmpty $dir.FullName) {
+            Write-Host ($index.ToString() + '/' + $directories.Count.ToString() + ' - Removing: ' + $dir.FullName);
             Remove-Item $dir.FullName -Force -Recurse -Confirm:$false;
         }
+        $index++;
     }
 }
 catch {

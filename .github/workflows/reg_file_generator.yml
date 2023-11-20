@@ -1,46 +1,48 @@
 name: Process PowerShell Script
 
 on:
-  push:
-    paths:
-      - '**/*.ps1'
-      - 'shellTemplate.reg'
+    push:
+        paths:
+            - "**/*.ps1"
+            - "shellTemplate.reg"
 
 jobs:
-  process-script:
-    runs-on: ubuntu-latest
+    process-script:
+        runs-on: ubuntu-latest
 
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v2
 
-    - name: Prepare .reg file
-      run: |
-        # Create the releases directory
-        mkdir -p releases
+            - name: Prepare .reg file
+              run: |
+                  # Create the releases directory
+                  mkdir -p releases
 
-        # Turn the PowerShell script into a single-liner
-        script=$(cat "emptyFolderRemover.ps1" | tr -d '\r' | tr '\n' ';')
+                  # Turn the PowerShell script into a single-liner
+                  script=$(cat "emptyFolderRemover.ps1" | tr -d '\r' | tr '\n' ';')
 
-        # Read the registry template
-        reg_template=$(cat "shellTemplate.reg")
+                  # Read the registry template
+                  reg_template=$(cat "shellTemplate.reg")
 
-        # Replace placeholders
-        processed_reg="${reg_template//<scriptGoesHere>/$script}"
-        processed_reg="${processed_reg//<shellnamegoeshere>/removeemptyfolders}"
-        processed_reg="${processed_reg//<Context Description Goes Here>/Remove Empty Folders}"
-        processed_reg="${processed_reg//<iconIndexGoesHere>/16806}"
+                  # Replace placeholders
+                  processed_reg="${reg_template//<scriptGoesHere>/$script}"
+                  processed_reg="${processed_reg//<shellnamegoeshere>/removeemptyfolders}"
+                  processed_reg="${processed_reg//<Context Description Goes Here>/Remove Empty Folders}"
+                  processed_reg="${processed_reg//<iconIndexGoesHere>/16806}"
 
-        # Get current timestamp
-        timestamp=$(date +"%Y-%m-%d_%H-%M-%S")
+                  # Get current timestamp
+                  timestamp=$(date +"%Y-%m-%d_%H-%M-%S")
 
-        # Save the processed registry file with timestamp
-        echo "$processed_reg" > "releases/emptyFolderRemover_$timestamp.reg"
+                  # Save the processed registry file with timestamp
+                  echo "$processed_reg" > "releases/emptyFolderRemover_$timestamp.reg"
 
-    - name: Commit and Push changes
-      run: |
-        git config --global user.name 'DoganM95'
-        git config --global user.email 'doganmermertas@hotmail.de'
-        git add .
-        git commit -m "Generate reg file from source"
-        git push
+            - name: Commit and Push changes
+              run: |
+                  git config --global user.name 'DoganM95'
+                  git config --global user.email 'doganmermertas@hotmail.de'
+                  git add .
+                  git commit -m "Generate reg file from source"
+                  git push
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

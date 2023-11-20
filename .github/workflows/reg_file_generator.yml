@@ -32,7 +32,7 @@ jobs:
         timestamp=$(date +"%Y-%m-%d_%H-%M-%S")
 
         # Save the processed registry file with timestamp
-        echo "$processed_reg" > "/releases/${{ vars.EXECUTABLE_NAME }}_$timestamp.reg"
+        echo "$processed_reg" > "releases/${{ vars.EXECUTABLE_NAME }}_$timestamp.reg"
 
     - name: Commit and Push changes
       run: |

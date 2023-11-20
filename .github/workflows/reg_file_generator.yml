@@ -1,0 +1,49 @@
+name: Process PowerShell Script
+
+on:
+  push:
+    paths:
+      - '**/*.ps1'
+      - '/shellTemplate.reg'
+
+jobs:
+  process-script:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install PowerShell
+      uses: actions/setup-powershell@v1
+
+    - name: Process Script
+      run: |
+        # Read the PowerShell script
+        $script = Get-Content /emptyFolderRemover.ps1 -Raw
+
+        # Turn it into a single-liner
+        $singleLineScript = $script -replace "`r`n", "; "
+
+        # Read the registry template
+        $regTemplate = Get-Content /shellTemplate.reg -Raw
+
+        # Replace placeholders
+        $processedReg = $regTemplate -replace "<scriptGoesHere>", $singleLineScript
+        $processedReg = $processedReg -replace "<shellnamegoeshere>", "${{ vars.REGISTRY_KEY_NAME }}"
+        $processedReg = $processedReg -replace "<Context Description Goes Here>", "${{ vars.CONTEXT_ITEM_DESCRIPTION }}"
+        $processedReg = $processedReg -replace "<iconIndexGoesHere>", "${{ vars.ICON_INDEX }}"
+
+        # Get current timestamp
+        $timestamp = Get-Date -Format "yyyy-MM-dd_HH-mm-ss"
+
+        # Save the processed registry file with timestamp
+        $processedReg | Set-Content "/releases/emptyFolderRemover_$timestamp.reg"
+
+    - name: Commit and Push changes
+      run: |
+        git config --global user.name 'DoganM95'
+        git config --global user.email 'doganmermertas@hotmail.de'
+        git add .
+        git commit -m "Generate registry file from source"
+        git push

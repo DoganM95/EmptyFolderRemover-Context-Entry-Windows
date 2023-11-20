@@ -17,22 +17,22 @@ jobs:
     - name: Prepare .reg file
       run: |
         # Turn the PowerShell script into a single-liner
-        script=$(cat "${{ vars.EXECUTABLE_NAME }}.ps1" | tr -d '\r' | tr '\n' ';')
+        script=$(cat "emptyFolderRemover.ps1" | tr -d '\r' | tr '\n' ';')
 
         # Read the registry template
         reg_template=$(cat "shellTemplate.reg")
 
         # Replace placeholders
         processed_reg="${reg_template//<scriptGoesHere>/$script}"
-        processed_reg="${processed_reg//<shellnamegoeshere>/${{ vars.REGISTRY_KEY_NAME }}"
-        processed_reg="${processed_reg//<Context Description Goes Here>/${{ vars.CONTEXT_ITEM_DESCRIPTION }}"
-        processed_reg="${processed_reg//<iconIndexGoesHere>/${{ vars.ICON_INDEX }}"
+        processed_reg="${processed_reg//<shellnamegoeshere>/removeemptyfolders}"
+        processed_reg="${processed_reg//<Context Description Goes Here>/Remove Empty Folders}"
+        processed_reg="${processed_reg//<iconIndexGoesHere>/16806}"
 
         # Get current timestamp
         timestamp=$(date +"%Y-%m-%d_%H-%M-%S")
 
         # Save the processed registry file with timestamp
-        echo "$processed_reg" > "releases/${{ vars.EXECUTABLE_NAME }}_$timestamp.reg"
+        echo "$processed_reg" > "releases/emptyFolderRemover_$timestamp.reg"
 
     - name: Commit and Push changes
       run: |

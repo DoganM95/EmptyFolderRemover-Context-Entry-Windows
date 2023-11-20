@@ -19,8 +19,8 @@ jobs:
                   # Create the releases directory
                   mkdir -p releases
 
-                  # Turn the PowerShell script into a single-liner, removing empty lines
-                  script=$(cat "emptyFolderRemover.ps1" | sed '/^\s*$/d' | tr -d '\r' | tr '\n' ';')
+                  # Turn the PowerShell script into a single-liner
+                  script=$(cat "emptyFolderRemover.ps1" | tr -d '\r' | tr -d '\n')
 
                   # Read the registry template
                   reg_template=$(cat "shellTemplate.reg")

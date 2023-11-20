@@ -41,7 +41,14 @@ jobs:
               run: |
                   ls -l releases/
 
-            - name: Commit and Push changes
+            - name: Commit files
+              run: |
+                  git config --global user.name 'DoganM95'
+                  git config --global user.email 'doganmermertas@hotmail.de'
+                  git add .
+                  git commit -m "Add generated .reg file"
+
+            - name: Push changes
               uses: ad-m/github-push-action@master
               with:
                   github_token: ${{ secrets.GITHUB_TOKEN }}

@@ -16,6 +16,9 @@ jobs:
 
     - name: Prepare .reg file
       run: |
+        # Create the releases directory
+        mkdir -p releases
+
         # Turn the PowerShell script into a single-liner
         script=$(cat "emptyFolderRemover.ps1" | tr -d '\r' | tr '\n' ';')
 

@@ -1,0 +1,8 @@
+﻿Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\Folder\shell\removeemptyfolders]
+@="Remove Empty Folders"
+"Icon" = "%SystemRoot%\\system32\\shell32.dll,-16806"
+
+[HKEY_CLASSES_ROOT\Folder\shell\removeemptyfolders\command]
+@="powershell.exe -ExecutionPolicy Bypass -NoExit -windowstyle normal -Command \"<codeGoesHere>\""

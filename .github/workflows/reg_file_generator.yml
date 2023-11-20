@@ -38,11 +38,7 @@ jobs:
                   echo "$processed_reg" > "releases/emptyFolderRemover_$timestamp.reg"
 
             - name: Commit and Push changes
-              run: |
-                  git config --global user.name 'DoganM95'
-                  git config --global user.email 'doganmermertas@hotmail.de'
-                  git add .
-                  git commit -m "Generate reg file from source"
-                  git push
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              uses: ad-m/github-push-action@master
+              with:
+                  github_token: ${{ secrets.GITHUB_TOKEN }}
+                  branch: ${{ github.ref }}

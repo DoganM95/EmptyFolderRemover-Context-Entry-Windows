@@ -1,4 +1,4 @@
-try { 
+try {
     Set-Location $pwd.Path;
     Set-Location -LiteralPath '%V';
     function IsFolderEmpty {

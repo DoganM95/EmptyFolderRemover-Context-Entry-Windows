@@ -4,7 +4,7 @@ on:
     push:
         paths:
             - "**/*.ps1"
-            - "shellTemplate.reg"
+            - "**/*Template.reg"
 
 jobs:
     process-script:
@@ -23,7 +23,7 @@ jobs:
                   script=$(cat "${{vars.EXECUTABLE_NAME}}.ps1" | tr -d '\r' | tr -d '\n')
 
                   # Read the registry template
-                  reg_template=$(cat "shellTemplate.reg")
+                  reg_template=$(cat "*Template.reg")
 
                   # Replace placeholders
                   processed_reg="${reg_template//<scriptGoesHere>/$script}"

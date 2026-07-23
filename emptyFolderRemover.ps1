@@ -5,7 +5,7 @@ try {
         param (
             [string]$folderPath
         );
-        $allItems = Get-ChildItem -Path $folderPath -Force;
+        $allItems = Get-ChildItem -LiteralPath $folderPath -Force;
         $fileItems = $allItems | Where-Object { -not $_.PSIsContainer };
         $directoryItems = $allItems | Where-Object { $_.PSIsContainer };
         if ($fileItems.Count -eq 0 -and $directoryItems.Count -eq 0) {
@@ -21,14 +21,14 @@ try {
     $directories = Get-ChildItem -Path . -Recurse -Directory -Force | Sort-Object { $_.FullName.Split('\\').Count } -Descending;
     $index = 1;
     foreach ($dir in $directories) {
-        if (IsFolderEmpty $dir.FullName) {
-            Write-Host ($index.ToString() + '/' + $directories.Count.ToString() + ' - Removing: ' + $dir.FullName);
-            try {
+        try {
+            if (IsFolderEmpty $dir.FullName) {
+                Write-Host ($index.ToString() + '/' + $directories.Count.ToString() + ' - Removing: ' + $dir.FullName);
                 Remove-Item -LiteralPath $dir.FullName -Force -Recurse -Confirm:$false -ErrorAction Stop;
             }
-            catch {
-                Write-Host ('  Failed to remove ' + $dir.FullName + ': ' + $_.Exception.Message) -ForegroundColor Red;
-            }
+        }
+        catch {
+            Write-Host ('  Failed to process ' + $dir.FullName + ': ' + $_.Exception.Message) -ForegroundColor Red;
         }
         $index++;
     }

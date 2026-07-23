@@ -30,7 +30,7 @@ jobs:
             - name: Check if .reg file is created
               run: |
                   ls -l releases/
-                  cat "Remove_${{vars.EXECUTABLE_NAME}}.reg"
+                  cat "Uninstaller.reg"
             - name: Commit files
               run: |
                   git config --global user.name 'DoganM95'

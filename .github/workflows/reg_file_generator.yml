@@ -25,7 +25,7 @@ jobs:
               run: |
                   remover_template=$(cat "shellRemoverTemplate.reg")
                   processed_remover="${remover_template//<shellnamegoeshere>/${{vars.REGISTRY_KEY_NAME}}}"
-                  echo "$processed_remover" > "Remove_${{vars.EXECUTABLE_NAME}}.reg"
+                  echo "$processed_remover" > "Uninstaller.reg"
             - name: Check if .reg file is created
               run: |
                   ls -l releases/

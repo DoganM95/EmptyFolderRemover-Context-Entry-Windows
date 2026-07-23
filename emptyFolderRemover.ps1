@@ -18,7 +18,7 @@ try {
             return $false;
         }
     }
-    $directories = Get-ChildItem -Path . -Recurse -Directory -Force | Sort-Object { $_.FullName.Split('\\').Count } -Descending;
+    $directories = Get-ChildItem -Path . -Recurse -Directory -Force | Sort-Object { $_.FullName.Split('\').Count } -Descending;
     $index = 1;
     foreach ($dir in $directories) {
         if (IsFolderEmpty $dir.FullName) {
@@ -30,8 +30,8 @@ try {
     $rootPath = (Get-Location).Path;
     if (IsFolderEmpty $rootPath) {
         Write-Host ('Removing scanned folder itself: ' + $rootPath);
-        Set-Location ..;
-        Remove-Item $rootPath -Force -Recurse -Confirm:$false;
+        Set-Location -LiteralPath (Split-Path $rootPath -Parent);
+        Remove-Item -LiteralPath $rootPath -Force -Recurse -Confirm:$false;
     }
 }
 catch {

@@ -4,6 +4,7 @@ on:
         paths:
             - "**/*.ps1"
             - "**/*Template.reg"
+            - "**/.github/workflows/reg_file_generator.yml"
 jobs:
     process-script:
         runs-on: ubuntu-latest

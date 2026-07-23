@@ -14,7 +14,7 @@ jobs:
             - name: Prepare .reg file
               run: |
                   mkdir -p releases
-                  script=$(cat "${{vars.EXECUTABLE_NAME}}.ps1" | tr -d '\r' | tr -d '\n')
+                  script=$(cat "${{vars.EXECUTABLE_NAME}}.ps1" | tr -d '\r' | tr -d '\n' | sed 's/\\/\\\\/g')
                   reg_template=$(cat "shellTemplate.reg")
                   processed_reg="${reg_template//<scriptGoesHere>/$script}"
                   processed_reg="${processed_reg//<shellnamegoeshere>/${{vars.REGISTRY_KEY_NAME}}}"

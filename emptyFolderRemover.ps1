@@ -27,6 +27,12 @@ try {
         }
         $index++;
     }
+    $rootPath = (Get-Location).Path;
+    if (IsFolderEmpty $rootPath) {
+        Write-Host ('Removing scanned folder itself: ' + $rootPath);
+        Set-Location ..;
+        Remove-Item $rootPath -Force -Recurse -Confirm:$false;
+    }
 }
 catch {
     Write-Host 'An error occured while removing empty folders recursively.' -ForegroundColor Red;

@@ -1,53 +1,41 @@
 name: Process PowerShell Script
-
 on:
     push:
         paths:
             - "**/*.ps1"
             - "**/*Template.reg"
-
 jobs:
     process-script:
         runs-on: ubuntu-latest
-
         steps:
             - name: Checkout repository
               uses: actions/checkout@v2
-
             - name: Prepare .reg file
               run: |
-                  # Create the releases directory
                   mkdir -p releases
-
-                  # Turn the PowerShell script into a single-liner
                   script=$(cat "${{vars.EXECUTABLE_NAME}}.ps1" | tr -d '\r' | tr -d '\n')
-
-                  # Read the registry template
                   reg_template=$(cat "shellTemplate.reg")
-
-                  # Replace placeholders
                   processed_reg="${reg_template//<scriptGoesHere>/$script}"
                   processed_reg="${processed_reg//<shellnamegoeshere>/${{vars.REGISTRY_KEY_NAME}}}"
                   processed_reg="${processed_reg//<Context Description Goes Here>/${{vars.CONTEXT_ITEM_DESCRIPTION}}}"
                   processed_reg="${processed_reg//<iconIndexGoesHere>/${{vars.ICON_INDEX}}}"
-
-                  # Get current timestamp
                   timestamp=$(date +"%Y-%m-%d_%H-%M-%S")
-
-                  # Save the processed registry file with timestamp
                   echo "$processed_reg" > "releases/${{vars.EXECUTABLE_NAME}}_$timestamp.reg"
-
+            - name: Prepare remover .reg file
+              run: |
+                  remover_template=$(cat "shellRemoverTemplate.reg")
+                  processed_remover="${remover_template//<shellnamegoeshere>/${{vars.REGISTRY_KEY_NAME}}}"
+                  echo "$processed_remover" > "Remove_${{vars.EXECUTABLE_NAME}}.reg"
             - name: Check if .reg file is created
               run: |
                   ls -l releases/
-
+                  cat "Remove_${{vars.EXECUTABLE_NAME}}.reg"
             - name: Commit files
               run: |
                   git config --global user.name 'DoganM95'
                   git config --global user.email 'doganmermertas@hotmail.de'
                   git add .
                   git commit -m "Add generated .reg file"
-
             - name: Push changes
               uses: ad-m/github-push-action@master
               with:
